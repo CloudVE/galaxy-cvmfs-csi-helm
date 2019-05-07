@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cvmfs-configmap
+  labels:
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  {{ range $key, $entry := .Values.configs -}}
+  {{- if $entry.contents -}}
+  {{ $key }}: |
+    {{- tpl $entry.contents $ | nindent 4 }}
+    {{- end }}
+  {{- end }}
