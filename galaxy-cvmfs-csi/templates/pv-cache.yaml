@@ -2,7 +2,7 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: cvmfs-cache-pv
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -22,7 +22,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: cvmfs-cache-pvc
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
