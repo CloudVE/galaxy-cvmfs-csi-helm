@@ -45,7 +45,7 @@ cache:
   storageClassName: manual
   accessMode: ReadWriteMany
   # size in Mi, will propagate to both default.local and PV/PVC size
-  size: 10000
+  size: 1000
   hostPath: /tmp/k8s/volumes/cvmfs/cache
   mountPath: /mnt/cvmfs/cache
 # Advanced settings
