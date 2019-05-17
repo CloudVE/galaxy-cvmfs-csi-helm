@@ -3,8 +3,10 @@ kind: ConfigMap
 metadata:
   name: cvmfs-configmap
   labels:
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" . }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
   {{- range $key, $entry := .Values.configs -}}
   {{- if $entry.contents -}}

@@ -3,8 +3,10 @@ kind: ServiceAccount
 metadata:
   name: cvmfs-attacher
   labels:
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" . }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 ---
 kind: ClusterRole
@@ -12,8 +14,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: cvmfs-external-attacher-runner
   labels:
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" . }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 rules:
   - apiGroups: [""]
     resources: ["events"]
@@ -35,8 +39,10 @@ metadata:
   name: cvmfs-attacher-role
   namespace: {{ .Release.Namespace }}
   labels:
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" . }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 subjects:
   - kind: ServiceAccount
     name: cvmfs-attacher

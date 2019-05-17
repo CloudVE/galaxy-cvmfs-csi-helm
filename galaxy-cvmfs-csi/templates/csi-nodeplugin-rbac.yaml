@@ -11,8 +11,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: cvmfs-nodeplugin
   labels:
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" . }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 rules:
   - apiGroups: [""]
     resources: ["nodes"]
@@ -32,8 +34,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: cvmfs-nodeplugin
   labels:
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" . }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 subjects:
   - kind: ServiceAccount
     name: cvmfs-nodeplugin

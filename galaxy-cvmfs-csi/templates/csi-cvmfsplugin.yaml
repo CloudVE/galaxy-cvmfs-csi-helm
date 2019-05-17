@@ -3,8 +3,10 @@ apiVersion: apps/v1beta2
 metadata:
   name: csi-cvmfsplugin
   labels:
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" . }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   selector:
     matchLabels:
@@ -12,8 +14,8 @@ spec:
   template:
     metadata:
       labels:
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
+        app.kubernetes.io/name: {{ include "cvmfs-csi.fullname" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
         app: csi-cvmfsplugin
     spec:
       serviceAccount: cvmfs-nodeplugin

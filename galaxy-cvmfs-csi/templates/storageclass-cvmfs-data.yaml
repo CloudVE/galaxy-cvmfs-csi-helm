@@ -3,8 +3,10 @@ kind: StorageClass
 metadata:
   name: cvmfs-gxy-data
   labels:
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" . }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
     app: csi-cvmfsplugin
 provisioner: csi-cvmfsplugin
 parameters:
