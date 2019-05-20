@@ -41,6 +41,12 @@ configs:
       torRYcoFZICTZqY9e/KsadHUeZnH3RvfMypH5oS1POzsFszoSxBhZIBkZbG3/f9Y
       OQIDAQAB
       -----END PUBLIC KEY-----
+# A storage class will be created for each repository
+repositories:
+  # The key will be used for the storage class name
+  # The value will be used for the repository
+  cvmfs-gxy-data: data.galaxyproject.org
+  cvmfs-gxy-main: main.galaxyproject.org
 cache:
   storageClassName: manual
   accessMode: ReadWriteMany

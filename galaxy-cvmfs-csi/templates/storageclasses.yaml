@@ -1,7 +1,8 @@
+{{- range $key, $rep := .Values.repositories -}}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: cvmfs-gxy-data
+  name: {{ $key }}
   labels:
     app.kubernetes.io/name: {{ include "cvmfs-csi.name" . }}
     helm.sh/chart: {{ include "cvmfs-csi.chart" . }}
@@ -10,4 +11,7 @@ metadata:
     app: csi-cvmfsplugin
 provisioner: csi-cvmfsplugin
 parameters:
-  repository: data.galaxyproject.org
+  repository: {{ $rep }}
+
+---
+{{ end }}
