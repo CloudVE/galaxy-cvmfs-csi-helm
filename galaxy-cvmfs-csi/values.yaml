@@ -96,7 +96,7 @@ cache:
 # Advanced settings
 # Changing these settings is not advised unless you know what you are doing
 csiPlugin:
-  image: gitlab-registry.nautilus.optiputer.net/prp/cvmfs-csi:latest
+  image: almahmoud/csi-cvmfsplugin:v1.0.1
   args:
     - "--nodeid=$(NODE_ID)"
     - "--endpoint=$(CSI_ENDPOINT)"
