@@ -96,7 +96,7 @@ cache:
 # Advanced settings
 # Changing these settings is not advised unless you know what you are doing
 csiPlugin:
-  image: almahmoud/csi-cvmfsplugin:v1.0.1
+  image: almahmoud/csi-cvmfsplugin:multins
   args:
     - "--nodeid=$(NODE_ID)"
     - "--endpoint=$(CSI_ENDPOINT)"

@@ -1,0 +1,21 @@
+{{- range $key, $rep := .Values.repositories -}}
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ $key }}-pv
+  labels:
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" $ }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+    app: csi-cvmfsplugin
+spec:
+  storageClassName: {{ $key }}
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadOnlyMany
+
+---
+{{ end }}
