@@ -87,11 +87,10 @@ repositories:
 #  cvmfs-gxy-singularity: singularity.galaxyproject.org
 
 cache:
-  storageClassName: manual
-  accessMode: ReadWriteMany
+  storageClassName: standard
+  accessMode: ReadWriteOnce
   # size in Mi, will propagate to both default.local and PV/PVC size
-  size: 1000
-  hostPath: /tmp/k8s/volumes/cvmfs/cache
+  size: 10000
   mountPath: /mnt/cvmfs/cache
 # Advanced settings
 # Changing these settings is not advised unless you know what you are doing
