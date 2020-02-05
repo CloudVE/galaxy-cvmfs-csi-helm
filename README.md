@@ -13,7 +13,6 @@ helm install --name gxy-cvmfs galaxy-cvmfs-csi-helm/galaxy-cvmfs-csi/
 Helm v3 Installation:
 ```
 helm install gxy-cvmfs galaxy-cvmfs-csi-helm/galaxy-cvmfs-csi/
-
 ```
 This will install the necessary storage classes into the current namespace that
 other charts/deployments can leverage to mount the CVMFS. For an example of how
