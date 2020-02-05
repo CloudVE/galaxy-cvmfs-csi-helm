@@ -4,9 +4,16 @@ system in Kubernetes environments.
 ## Use
 To use, clone this repository and install the chart:
 ```
-git clone https://github.com/CloudVE/galaxy-cvmfs-csi-chart
-cd galaxy-cvmfs-csi-chart
-helm install --name gxy-csi galaxy-cvmfs-csi-chart
+git clone https://github.com/CloudVE/galaxy-cvmfs-csi-helm
+```
+Helm v2 Installation:
+```
+helm install --name gxy-cvmfs galaxy-cvmfs-csi-helm/galaxy-cvmfs-csi/
+```
+Helm v3 Installation:
+```
+helm install gxy-cvmfs galaxy-cvmfs-csi-helm/galaxy-cvmfs-csi/
+
 ```
 This will install the necessary storage classes into the current namespace that
 other charts/deployments can leverage to mount the CVMFS. For an example of how
