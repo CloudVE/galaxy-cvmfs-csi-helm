@@ -13,8 +13,17 @@ configs:
       CVMFS_USE_GEOAPI=yes
       CVMFS_HTTP_PROXY="DIRECT"
       # It is advised to change these configs in the cache section of the helm values
-      CVMFS_QUOTA_LIMIT={{ .Values.cache.size }}
-      CVMFS_CACHE_BASE={{ .Values.cache.mountPath }}
+      # and leave them unchanged here, so they auto-generate
+      CVMFS_QUOTA_LIMIT={{ .Values.cache.localCache.size }}
+      CVMFS_CACHE_BASE={{ .Values.cache.localCache.mountPath }}
+      {{- if .Values.cache.alienCache.enabled }}
+      CVMFS_ALIEN_CACHE={{ .Values.cache.alienCache.mountPath }}
+      # When alien cache is used, CVMFS does not control the size of the cache
+      CVMFS_QUOTA_LIMIT=-1
+      # For clarification, this is referencing whether repositories
+      # should share a cache directory or each have their own
+      CVMFS_SHARED_CACHE=no
+      {{- end -}}
   gxyDataKey:
     mountPath: keys/data.galaxyproject.org.pub
     contents: |
@@ -87,11 +96,30 @@ repositories:
 #  cvmfs-gxy-singularity: singularity.galaxyproject.org
 
 cache:
-  storageClassName: standard
-  accessMode: ReadWriteOnce
-  # size in Mi, will propagate to both default.local and PV/PVC size
-  size: 10000
-  mountPath: /mnt/cvmfs/cache
+  # Requires a ReadWriteOnce volume for the local cache
+  # localCache can not be used in a multi-node setup unless
+  # the cache PVs are defined manually for all pods of the DaemonSet.
+  # If local cache is enabled, alien cache must be disabled.
+  localCache:
+    enabled: true
+    storageClass: ""
+    # size in Mi, will propagate to both default.local and PV/PVC size
+    size: 10000
+    mountPath: /mnt/cvmfs/localcache
+  # Optional shared ReadWriteMany cache volume.
+  # If alien cache is enabled, local cache will be ignored.
+  # An emptyDir ephemeral volume will be used for local
+  # control files for each pod scaled by the DaemonSet on
+  # each node. The alien cache volume will be shared
+  # among all the CVMFS clients running on the different nodes.
+  # Read more about alien cache limitations at:
+  # https://cvmfs.readthedocs.io/en/stable/cpt-configure.html#alien-cache
+  alienCache:
+    enabled: false
+    size: 10000 # in Mi
+    storageClass: nfs
+    mountPath: /mnt/cvmfs/aliencache
+
 # Advanced settings
 # Changing these settings is not advised unless you know what you are doing
 csiPlugin:

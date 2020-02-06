@@ -72,8 +72,12 @@ spec:
               mountPath: /etc/cvmfs/{{ $entry.mountPath }}
               subPath: {{ $key }}
             {{- end }}
-            - name: cvmfs-cache
-              mountPath: {{ .Values.cache.mountPath }}
+            - name: cvmfs-local-cache
+              mountPath: {{ .Values.cache.localCache.mountPath }}
+            {{- if .Values.cache.alienCache.enabled }}
+            - name: cvmfs-alien-cache
+              mountPath: {{ .Values.cache.alienCache.mountPath }}
+            {{- end }}
       volumes:
         - name: plugin-dir
           hostPath:
@@ -99,6 +103,23 @@ spec:
         - name: cvmfs-config
           configMap:
             name: cvmfs-configmap
-        - name: cvmfs-cache
+        {{- if (and .Values.cache.alienCache.enabled .Values.cache.localCache.enabled) }}
+        {{- fail "Only one of alien or local cache should be enabled."}}
+        {{- end }}
+        {{- if .Values.cache.alienCache.enabled }}
+        - name: cvmfs-alien-cache
           persistentVolumeClaim:
-            claimName: cvmfs-cache-pvc
+            claimName: cvmfs-alien-cache-pvc
+        - name: cvmfs-local-cache
+          emptyDir: {}
+        {{- else }}
+        {{- if .Values.cache.localCache.enabled }}
+        - name: cvmfs-local-cache
+          persistentVolumeClaim:
+            claimName: cvmfs-local-cache-pvc
+        {{- else }}
+        - name: cvmfs-local-cache
+          emptyDir: {}
+        {{- end }}
+        {{- end }}
+
