@@ -96,6 +96,8 @@ repositories:
 #  cvmfs-gxy-singularity: singularity.galaxyproject.org
 
 cache:
+  # If both local and alien cache are disabled, ephemeral
+  # storage (emptyDir volume) will be used for caching
   # Requires a ReadWriteOnce volume for the local cache
   # localCache can not be used in a multi-node setup unless
   # the cache PVs are defined manually for all pods of the DaemonSet.
@@ -107,7 +109,7 @@ cache:
     size: 10000
     mountPath: /mnt/cvmfs/localcache
   # Optional shared ReadWriteMany cache volume.
-  # If alien cache is enabled, local cache will be ignored.
+  # If alien cache is enabled, local cache must be disabled.
   # An emptyDir ephemeral volume will be used for local
   # control files for each pod scaled by the DaemonSet on
   # each node. The alien cache volume will be shared
