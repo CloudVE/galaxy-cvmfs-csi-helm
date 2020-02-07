@@ -1,0 +1,57 @@
+{{- if .Values.cache.preload.enabled }}
+{{- range $key, $repo := .Values.repositories -}}
+{{- range $prerepo := $.Values.cache.preload.repositories }}
+{{- if eq $repo $prerepo.name }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $.Release.Name }}-cvmfs-pvc-{{ $key }}
+  labels:
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" $ }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+spec:
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: {{ $key }}
+---
+{{- end }}
+{{- end }}
+{{- end }}
+{{- range $key, $repo := .Values.repositories -}}
+{{- range $num, $prerepo := $.Values.cache.preload.repositories }}
+{{- if eq $repo $prerepo.name }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cvmfs-cache-preload-{{ $num }}
+  labels:
+    app.kubernetes.io/name: {{ include "cvmfs-csi.name" $ }}
+    helm.sh/chart: {{ include "cvmfs-csi.chart" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: preload-cache
+        image: busybox
+        command: ["sh", "-c", {{- join " & " $prerepo.commands | quote }}]
+        volumeMounts:
+          - name: {{ $key }}-vol
+            mountPath: {{ $prerepo.mountPath }}
+      volumes:
+        - name: {{ $key }}-vol
+          persistentVolumeClaim:
+            claimName: {{ $.Release.Name }}-cvmfs-pvc-{{ $key }}
+      restartPolicy: Never
+  backoffLimit: 4
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+

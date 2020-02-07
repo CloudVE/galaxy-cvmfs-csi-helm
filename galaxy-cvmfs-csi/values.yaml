@@ -103,7 +103,7 @@ cache:
   # the cache PVs are defined manually for all pods of the DaemonSet.
   # If local cache is enabled, alien cache must be disabled.
   localCache:
-    enabled: true
+    enabled: false
     storageClass: ""
     # size in Mi, will propagate to both default.local and PV/PVC size
     size: 10000
@@ -117,10 +117,19 @@ cache:
   # Read more about alien cache limitations at:
   # https://cvmfs.readthedocs.io/en/stable/cpt-configure.html#alien-cache
   alienCache:
-    enabled: false
+    enabled: true
     size: 10000 # in Mi
     storageClass: nfs
     mountPath: /mnt/cvmfs/aliencache
+  preload:
+    enabled: true
+    repositories:
+      - name: main.galaxyproject.org
+        mountPath: /cvmfs/main.galaxyproject.org
+        commands:
+          - find /cvmfs/main.galaxyproject.org/shed_tools -type f -not -path "*/.hg/*" -path "*.xml" -exec cat \{\} \; > /dev/null
+          - find /cvmfs/main.galaxyproject.org/config -type f -exec cat \{\} \; > /dev/null
+          - find /cvmfs/main.galaxyproject.org/tool_data -type f -exec cat \{\} \; > /dev/null
 
 # Advanced settings
 # Changing these settings is not advised unless you know what you are doing

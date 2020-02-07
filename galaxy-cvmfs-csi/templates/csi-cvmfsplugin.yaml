@@ -109,16 +109,16 @@ spec:
         {{- if .Values.cache.alienCache.enabled }}
         - name: cvmfs-alien-cache
           persistentVolumeClaim:
-            claimName: cvmfs-alien-cache-pvc
+            claimName: {{ .Release.Name }}-cvmfs-alien-cache-pvc
         - name: cvmfs-local-cache
           emptyDir: {}
         {{- else }}
         {{- if .Values.cache.localCache.enabled }}
         - name: cvmfs-local-cache
           persistentVolumeClaim:
-            claimName: cvmfs-local-cache-pvc
+            claimName: {{ .Release.Name }}-cvmfs-local-cache-pvc
         {{- else }}
-        - name: cvmfs-local-cache
+        - name: {{ .Release.Name }}-cvmfs-local-cache-pvc
           emptyDir: {}
         {{- end }}
         {{- end }}
