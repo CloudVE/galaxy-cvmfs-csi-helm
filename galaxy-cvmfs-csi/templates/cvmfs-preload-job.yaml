@@ -38,8 +38,8 @@ spec:
   template:
     spec:
       containers:
-      - name: preload-cache
-        image: busybox
+      - name: preload-cache-{{ $key }}
+        image: {{ $prerepo.image }}
         command: ["sh", "-c", {{- join " & " $prerepo.commands | quote }}]
         volumeMounts:
           - name: {{ $key }}-vol
@@ -49,9 +49,8 @@ spec:
           persistentVolumeClaim:
             claimName: {{ $.Release.Name }}-cvmfs-pvc-{{ $key }}
       restartPolicy: Never
-  backoffLimit: 4
+  backoffLimit: 10
 {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
-

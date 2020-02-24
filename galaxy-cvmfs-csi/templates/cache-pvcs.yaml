@@ -17,7 +17,7 @@ spec:
     requests:
       storage: {{ .Values.cache.alienCache.size }}Mi
 {{ else -}}
-{{- if .Values.cache.alienCache.enabled }}
+{{- if .Values.cache.localCache.enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

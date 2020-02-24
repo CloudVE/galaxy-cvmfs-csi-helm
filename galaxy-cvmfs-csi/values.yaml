@@ -126,6 +126,7 @@ cache:
     repositories:
       - name: main.galaxyproject.org
         mountPath: /cvmfs/main.galaxyproject.org
+        image: busybox
         commands:
           - find /cvmfs/main.galaxyproject.org/shed_tools -type f -not -path "*/.hg/*" -path "*.xml" -exec cat \{\} \; > /dev/null
           - find /cvmfs/main.galaxyproject.org/config -type f -exec cat \{\} \; > /dev/null
@@ -134,6 +135,9 @@ cache:
 # Advanced settings
 # Changing these settings is not advised unless you know what you are doing
 csiPlugin:
+  # This image includes the patch to the plugin allowing
+  # for multiple PVCs across multiple namespaces
+  # https://github.com/cernops/cvmfs-csi/commit/c680862082738aba1469707a891a6f7fecf72f53
   image: cloudve/csi-cvmfsplugin:v1.0.1
   args:
     - "--nodeid=$(NODE_ID)"
