@@ -131,6 +131,16 @@ cache:
           - find /cvmfs/main.galaxyproject.org/shed_tools -type f -not -path "*/.hg/*" -path "*.xml" -exec cat \{\} \; > /dev/null
           - find /cvmfs/main.galaxyproject.org/config -type f -exec cat \{\} \; > /dev/null
           - find /cvmfs/main.galaxyproject.org/tool_data -type f -exec cat \{\} \; > /dev/null
+      # - name: data.galaxyproject.org
+      #   mountPath: /cvmfs/data.galaxyproject.org
+      #   # Docker image with cvmfs_preload binary pre-installed
+      #   image: almahmoud/cvmfs_preload:latest
+      #   mountConfigs:
+      #     - defaultLocal
+      #     - gxyDataKey
+      #   mountCache: true
+      #   commands:
+      #     - cvmfs_preload -u http://cvmfs0-psu0.galaxyproject.org/cvmfs/data.galaxyproject.org -r /mnt/cvmfs/aliencache -k /etc/cvmfs/keys
 
 # Advanced settings
 # Changing these settings is not advised unless you know what you are doing
