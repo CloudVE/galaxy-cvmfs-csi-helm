@@ -12,9 +12,7 @@ metadata:
     app.kubernetes.io/instance: {{ $.Release.Name }}
     app.kubernetes.io/managed-by: {{ $.Release.Service }}
   annotations:
-    # xref: https://github.com/helm/helm/issues/3053
-    # xref: https://github.com/helm/helm/pull/5290
-    "helm.sh/hook": "pre-install"
+    "helm.sh/hook": "post-install"
     "helm.sh/hook-delete-policy": "before-hook-creation"
 spec:
   accessModes:
@@ -33,17 +31,12 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: cvmfs-cache-preload-{{ $num }}
+  name: {{ $.Release.Name }}-cvmfs-cache-preload-{{ $num }}
   labels:
     app.kubernetes.io/name: {{ include "cvmfs-csi.name" $ }}
     helm.sh/chart: {{ include "cvmfs-csi.chart" $ }}
     app.kubernetes.io/instance: {{ $.Release.Name }}
     app.kubernetes.io/managed-by: {{ $.Release.Service }}
-  annotations:
-    # xref: https://github.com/helm/helm/issues/3053
-    # xref: https://github.com/helm/helm/pull/5290
-    "helm.sh/hook": "pre-install"
-    "helm.sh/hook-delete-policy": "before-hook-creation"
 spec:
   backoffLimit: 10
   template:
