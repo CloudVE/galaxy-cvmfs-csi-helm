@@ -18,7 +18,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app: csi-cvmfsplugin
     spec:
-      serviceAccount: cvmfs-nodeplugin
+      serviceAccount: {{include "cvmfs-csi.fullname" .}}-cvmfs-nodeplugin
       hostNetwork: true
       containers:
         - name: csi-driver-registrar
