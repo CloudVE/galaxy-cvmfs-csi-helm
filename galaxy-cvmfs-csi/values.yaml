@@ -98,11 +98,12 @@ configs:
   #     -----END PUBLIC KEY-----
 
 # A storage class will be created for each repository
-repositories:
+repositories: {}
   # The key will be used for the storage class name
   # The value will be used for the repository
-  cvmfs-gxy-data: data.galaxyproject.org
-  cvmfs-gxy-cloud: cloud.galaxyproject.org
+
+  #cvmfs-gxy-cloud: cloud.galaxyproject.org
+  # cvmfs-gxy-data: data.galaxyproject.org
   # cvmfs-gxy-main: main.galaxyproject.org
 #  cvmfs-gxy-sandbox: sandbox.galaxyproject.org
 #  cvmfs-gxy-test: test.galaxyproject.org
