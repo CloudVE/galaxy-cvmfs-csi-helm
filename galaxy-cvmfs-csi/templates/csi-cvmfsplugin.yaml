@@ -78,6 +78,10 @@ spec:
             - name: cvmfs-alien-cache
               mountPath: {{ .Values.cache.alienCache.mountPath }}
             {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: plugin-dir
           hostPath:
