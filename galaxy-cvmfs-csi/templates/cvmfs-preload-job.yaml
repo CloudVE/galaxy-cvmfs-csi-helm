@@ -42,14 +42,14 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      {{- with $.Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: preload-cache-{{ $key }}
         image: {{ $prerepo.image }}
         command: ["sh", "-c", {{- join " & " $prerepo.commands | quote }}]
-        {{- with $.Values.nodeSelector }}
-        nodeSelector:
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
         volumeMounts:
           - name: {{ $key }}-vol
             mountPath: {{ $prerepo.mountPath }}
