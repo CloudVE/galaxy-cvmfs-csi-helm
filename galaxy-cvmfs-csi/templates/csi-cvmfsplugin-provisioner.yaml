@@ -17,7 +17,7 @@ spec:
 
 ---
 kind: StatefulSet
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 metadata:
   name: csi-cvmfsplugin-provisioner
   labels:
@@ -26,6 +26,9 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+  selector:
+    matchLabels:
+      app: csi-cvmfsplugin-provisioner
   serviceName: "csi-cvmfsplugin-provisioner"
   replicas: 1
   template:
@@ -35,7 +38,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app: csi-cvmfsplugin-provisioner
     spec:
-      serviceAccount: cvmfs-provisioner
+      serviceAccountName: cvmfs-provisioner
       containers:
         - name: csi-provisioner
           image: {{ .Values.csiProvisioner.image }}
