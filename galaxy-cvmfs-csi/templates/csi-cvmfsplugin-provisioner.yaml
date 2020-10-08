@@ -35,6 +35,10 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app: csi-cvmfsplugin-provisioner
     spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccount: cvmfs-provisioner
       containers:
         - name: csi-provisioner
