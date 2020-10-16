@@ -17,7 +17,7 @@ spec:
 
 ---
 kind: StatefulSet
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 metadata:
   name: csi-cvmfsplugin-attacher
   labels:
@@ -26,6 +26,9 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+  selector:
+    matchLabels:
+      app: csi-cvmfsplugin-attacher
   serviceName: "csi-cvmfsplugin-attacher"
   replicas: 1
   template:
@@ -35,11 +38,11 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app: csi-cvmfsplugin-attacher
     spec:
+      serviceAccountName: cvmfs-attacher
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccount: cvmfs-attacher
       containers:
         - name: csi-attacher
           image: {{ .Values.csiAttacher.image }}
