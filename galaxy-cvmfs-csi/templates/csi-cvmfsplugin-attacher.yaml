@@ -39,6 +39,10 @@ spec:
         app: csi-cvmfsplugin-attacher
     spec:
       serviceAccountName: cvmfs-attacher
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: csi-attacher
           image: {{ .Values.csiAttacher.image }}
