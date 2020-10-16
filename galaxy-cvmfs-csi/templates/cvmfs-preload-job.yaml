@@ -42,6 +42,10 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      {{- with $.Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: preload-cache-{{ $key }}
         image: {{ $prerepo.image }}

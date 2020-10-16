@@ -35,6 +35,10 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app: csi-cvmfsplugin-attacher
     spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccount: cvmfs-attacher
       containers:
         - name: csi-attacher
