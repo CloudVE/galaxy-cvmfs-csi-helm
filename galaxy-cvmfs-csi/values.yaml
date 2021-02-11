@@ -108,6 +108,7 @@ cache:
     # size in Mi, will propagate to both default.local and PV/PVC size
     size: 10000
     mountPath: /mnt/cvmfs/localcache
+    # existingClaim: existing-claim
   # Optional shared ReadWriteMany cache volume.
   # If alien cache is enabled, local cache must be disabled.
   # An emptyDir ephemeral volume will be used for local
@@ -121,6 +122,7 @@ cache:
     size: 10000 # in Mi
     storageClass: nfs
     mountPath: /mnt/cvmfs/aliencache
+    # existingClaim: existing-claim
   preload:
     enabled: true
     repositories:
