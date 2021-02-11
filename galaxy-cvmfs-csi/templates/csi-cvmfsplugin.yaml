@@ -111,16 +111,30 @@ spec:
         {{- fail "Only one of alien or local cache should be enabled."}}
         {{- end }}
         {{- if .Values.cache.alienCache.enabled }}
+        {{- if .Values.cache.alienCache.existingClaim }}
+        - name: cvmfs-alien-cache
+          persistentVolumeClaim:
+            claimName: {{ .Values.cache.alienCache.existingClaim }}
+        - name: cvmfs-local-cache
+          emptyDir: {}
+        {{- else }}
         - name: cvmfs-alien-cache
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-cvmfs-alien-cache-pvc
         - name: cvmfs-local-cache
           emptyDir: {}
+        {{- end }}
         {{- else }}
         {{- if .Values.cache.localCache.enabled }}
+        {{- if .Values.cache.localCache.existingClaim }}
+        - name: cvmfs-local-cache
+          persistentVolumeClaim:
+            claimName: {{ .Values.cache.localCache.existingClaim }}
+        {{- else }}
         - name: cvmfs-local-cache
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-cvmfs-local-cache-pvc
+        {{- end }}
         {{- else }}
         - name: {{ .Release.Name }}-cvmfs-local-cache-pvc
           emptyDir: {}
