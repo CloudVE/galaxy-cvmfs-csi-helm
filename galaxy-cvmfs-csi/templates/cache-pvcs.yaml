@@ -1,4 +1,5 @@
 {{- if .Values.cache.alienCache.enabled }}
+{{- if not .Values.cache.alienCache.existingClaim }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -16,8 +17,10 @@ spec:
   resources:
     requests:
       storage: {{ .Values.cache.alienCache.size }}Mi
+{{ end -}}
 {{ else -}}
 {{- if .Values.cache.localCache.enabled }}
+{{- if not .Values.cache.localCache.existingClaim }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -35,5 +38,6 @@ spec:
   resources:
     requests:
       storage: {{ .Values.cache.localCache.size }}Mi
+{{ end -}}
 {{ end -}}
 {{ end -}}
