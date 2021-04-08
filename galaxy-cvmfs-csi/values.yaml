@@ -36,8 +36,20 @@ configs:
       NVNhhcb66OJHah5ppI1N3cZehdaKyr1XcF9eedwLFTvuiwTn6qMmttT/tHX7rcxT
       owIDAQAB
       -----END PUBLIC KEY-----
-  gxyMainKey:
-    mountPath: keys/galaxyproject.org/main.galaxyproject.org.pub
+#   gxyMainKey:
+#     mountPath: keys/galaxyproject.org/main.galaxyproject.org.pub
+#     contents: |
+#       -----BEGIN PUBLIC KEY-----
+#       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6S6Tugcv4kk4C06f574l
+#       YCXQdK6lv2m7mqCh60G0zL1+rAkkEBDWna0yMQLBbj+yDsHjcOe0yISzbTfzG6wk
+#       KnHZUQ/JOeK7lUAbDMxHqnjkEPAbAl4vXl2Y04MW2lzJtXcDKakmLirvV/dfUYqE
+#       gGGx0dc/Z+XmUTf1DvZFJknrBUUxO5+F6m7k/NGrlpAca+e9B0kwCclaE4NyaNWK
+#       Jv5rPWCYz5/sDNW4cNvBdBjwGf46etbczmJoTAbl0oM6LLGdebwkJStd0R1wkj+A
+#       torRYcoFZICTZqY9e/KsadHUeZnH3RvfMypH5oS1POzsFszoSxBhZIBkZbG3/f9Y
+#       OQIDAQAB
+#       -----END PUBLIC KEY-----
+  gxyCloudKey:
+    mountPath: keys/galaxyproject.org/cloud.galaxyproject.org.pub
     contents: |
       -----BEGIN PUBLIC KEY-----
       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6S6Tugcv4kk4C06f574l
@@ -90,7 +102,8 @@ repositories:
   # The key will be used for the storage class name
   # The value will be used for the repository
   cvmfs-gxy-data: data.galaxyproject.org
-  cvmfs-gxy-main: main.galaxyproject.org
+  cvmfs-gxy-cloud: cloud.galaxyproject.org
+  # cvmfs-gxy-main: main.galaxyproject.org
 #  cvmfs-gxy-sandbox: sandbox.galaxyproject.org
 #  cvmfs-gxy-test: test.galaxyproject.org
 #  cvmfs-gxy-singularity: singularity.galaxyproject.org
@@ -122,7 +135,7 @@ cache:
     storageClass: nfs
     mountPath: /mnt/cvmfs/aliencache
   preload:
-    enabled: true
+    enabled: false
     repositories:
       - name: main.galaxyproject.org
         mountPath: /cvmfs/main.galaxyproject.org
