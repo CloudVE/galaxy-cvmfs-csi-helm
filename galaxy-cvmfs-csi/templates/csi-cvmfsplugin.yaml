@@ -136,7 +136,7 @@ spec:
             claimName: {{ .Release.Name }}-cvmfs-local-cache-pvc
         {{- end }}
         {{- else }}
-        - name: {{ .Release.Name }}-cvmfs-local-cache-pvc
+        - name: cvmfs-local-cache
           emptyDir: {}
         {{- end }}
         {{- end }}
