@@ -4,182 +4,72 @@
 
 # All contents will be run through tpl
 # All mountPaths are relative to /etc/cvmfs/
-configs:
-  defaultLocal:
-    mountPath: default.local
-    contents: |
-      CVMFS_SERVER_URL="http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@;http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
-      CVMFS_KEYS_DIR="/etc/cvmfs/keys/galaxyproject.org"
-      CVMFS_USE_GEOAPI=yes
-      CVMFS_HTTP_PROXY="DIRECT"
-      # It is advised to change these configs in the cache section of the helm values
-      # and leave them unchanged here, so they auto-generate
-      CVMFS_QUOTA_LIMIT={{ .Values.cache.localCache.size }}
-      CVMFS_CACHE_BASE={{ .Values.cache.localCache.mountPath }}
-      {{- if .Values.cache.alienCache.enabled }}
-      CVMFS_ALIEN_CACHE={{ .Values.cache.alienCache.mountPath }}
-      # When alien cache is used, CVMFS does not control the size of the cache
-      CVMFS_QUOTA_LIMIT=-1
-      # For clarification, this is referencing whether repositories
-      # should share a cache directory or each have their own
-      CVMFS_SHARED_CACHE=no
-      {{- end -}}
-  gxyDataKey:
-    mountPath: keys/galaxyproject.org/data.galaxyproject.org.pub
-    contents: |
-      -----BEGIN PUBLIC KEY-----
-      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5LHQuKWzcX5iBbCGsXGt
-      6CRi9+a9cKZG4UlX/lJukEJ+3dSxVDWJs88PSdLk+E25494oU56hB8YeVq+W8AQE
-      3LWx2K2ruRjEAI2o8sRgs/IbafjZ7cBuERzqj3Tn5qUIBFoKUMWMSIiWTQe2Sfnj
-      GzfDoswr5TTk7aH/FIXUjLnLGGCOzPtUC244IhHARzu86bWYxQJUw0/kZl5wVGcH
-      maSgr39h1xPst0Vx1keJ95AH0wqxPbCcyBGtF1L6HQlLidmoIDqcCQpLsGJJEoOs
-      NVNhhcb66OJHah5ppI1N3cZehdaKyr1XcF9eedwLFTvuiwTn6qMmttT/tHX7rcxT
-      owIDAQAB
-      -----END PUBLIC KEY-----
-#   gxyMainKey:
-#     mountPath: keys/galaxyproject.org/main.galaxyproject.org.pub
-#     contents: |
-#       -----BEGIN PUBLIC KEY-----
-#       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6S6Tugcv4kk4C06f574l
-#       YCXQdK6lv2m7mqCh60G0zL1+rAkkEBDWna0yMQLBbj+yDsHjcOe0yISzbTfzG6wk
-#       KnHZUQ/JOeK7lUAbDMxHqnjkEPAbAl4vXl2Y04MW2lzJtXcDKakmLirvV/dfUYqE
-#       gGGx0dc/Z+XmUTf1DvZFJknrBUUxO5+F6m7k/NGrlpAca+e9B0kwCclaE4NyaNWK
-#       Jv5rPWCYz5/sDNW4cNvBdBjwGf46etbczmJoTAbl0oM6LLGdebwkJStd0R1wkj+A
-#       torRYcoFZICTZqY9e/KsadHUeZnH3RvfMypH5oS1POzsFszoSxBhZIBkZbG3/f9Y
-#       OQIDAQAB
-#       -----END PUBLIC KEY-----
-  gxyCloudKey:
-    mountPath: keys/galaxyproject.org/cloud.galaxyproject.org.pub
-    contents: |
-      -----BEGIN PUBLIC KEY-----
-      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuJZTWTY3/dBfspFKifv8
-      TWuuT2Zzoo1cAskKpKu5gsUAyDFbZfYBEy91qbLPC3TuUm2zdPNsjCQbbq1Liufk
-      uNPZJ8Ubn5PR6kndwrdD13NVHZpXVml1+ooTSF5CL3x/KUkYiyRz94sAr9trVoSx
-      THW2buV7ADUYivX7ofCvBu5T6YngbPZNIxDB4mh7cEal/UDtxV683A/5RL4wIYvt
-      S5SVemmu6Yb8GkGwLGmMVLYXutuaHdMFyKzWm+qFlG5JRz4okUWERvtJ2QAJPOzL
-      mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
-      dQIDAQAB
-      -----END PUBLIC KEY-----
-  # gxySandboxKey:
-  #   mountPath: keys/galaxyproject.org/sandbox.galaxyproject.org.pub
-  #   contents: |
-  #     -----BEGIN PUBLIC KEY-----
-  #     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1jHnrwsxMUkMZDAj9GMt
-  #     WNCFFrNVejTTbyklk+52yyXgVgRWo1qN+5lh6W2UL/b2v9pOEzRVPZBQvNNwKo6P
-  #     e+5p2JBVJ5yv7tpegEnHaRYw6yoHlWLzeSfiu8/yNp2s3jzK52zdLE9rZu7KlXH3
-  #     EiY2LbU8wa0oah8BlvqWoHlWm78IQbbgK3Q0KmsXpvpjjhYkRWh/TL7KRmwT0b+C
-  #     WDNbviUi62sBl1SWQ95kcsfqfviU94DKGWRWDYngnYRV5PZVLuUw8Egix6lW2Sj0
-  #     l5LILRbaIyXiTsFqXfK1dtjAOmZMkX4wuBch13y9FhMCIRvBDWYQuyxugSC101Ur
-  #     YwIDAQAB
-  #     -----END PUBLIC KEY-----
-  # gxyTestKey:
-  #   mountPath: keys/galaxyproject.org/test.galaxyproject.org.pub
-  #   contents: |
-  #     -----BEGIN PUBLIC KEY-----
-  #     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtfc5SSX9ALcrukWYcxkI
-  #     mkLhlkJa5tCP1oZNWFA7GfE4xQW2vcKE5qmbZqhYVfdiy+FHPnhWPJp577hekD2F
-  #     vMITbApdZ0265AjRC0+EKKxpMF8zZ0q71vCFxvdK0c3DtT/3LmqKrr2wimtJZjQN
-  #     UAZcQG2ykzeHzFZ46w74IO0o8Fv/w2XEbYI0QqbNFv+0hcp5SruFqaaLsRZdd6Bn
-  #     3iSylgVRQ5b+h1LfB/EuEpSmH1sDozZ4tU0fpbrBSknK76aad1o/cvWY1X87ToUV
-  #     helU0HE2Rw/u9EqJDvPFTbUmad3MtspkqbG5Eo7lI+ktzbcD7UTsQ/7noIXIQ5dD
-  #     PwIDAQAB
-  #     -----END PUBLIC KEY-----
-  # gxySingularityKey:
-  #   mountPath: keys/galaxyproject.org/test.galaxyproject.org.pub
-  #   contents: |
-  #     -----BEGIN PUBLIC KEY-----
-  #     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt977djqKnD4WbYNq8VtU
-  #     v9b8BgFzo1wh8rEUdj/2W9IvLXr5iWRrk1OvyZugYGxUg2JSVxiSXJhP1m8uBfBG
-  #     aX2jn4iAq1suuIxJ6UMO+SYR/9yUANY/JKvfI9qHN9ItXxYveRXwORWb6s3zyCm3
-  #     FFTRTUVQ5NFC+yT13BeIKyLMhT8yMSnlZ/5f8kuwSC1v/2QcC6UWDrHaUcEGWcHS
-  #     EfiTov/pVXq0Hv3M2kwBWMqWeFey4WbnuNOCXYrYy9VCxmPAtO0TjFuThMr9XyWc
-  #     Zu859ZLVjmkMxPxEPNxgNnc+DohK5wFPt7MHSejvCmd1J8iL4DOXUN2VvgJ9NrUN
-  #     hwIDAQAB
-  #     -----END PUBLIC KEY-----
 
-# A storage class will be created for each repository
-repositories: {}
-  # The key will be used for the storage class name
-  # The value will be used for the repository
+cvmfscsi:
+  cvmfsConfig:
+    config.d:
+      data:
+        data.galaxyproject.org.conf: |
+          CVMFS_SERVER_URL="http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@;http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
+          CVMFS_PUBLIC_KEY="/etc/cvmfs/config.d/data.galaxyproject.org.pub"
+        data.galaxyproject.org.pub: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5LHQuKWzcX5iBbCGsXGt
+          6CRi9+a9cKZG4UlX/lJukEJ+3dSxVDWJs88PSdLk+E25494oU56hB8YeVq+W8AQE
+          3LWx2K2ruRjEAI2o8sRgs/IbafjZ7cBuERzqj3Tn5qUIBFoKUMWMSIiWTQe2Sfnj
+          GzfDoswr5TTk7aH/FIXUjLnLGGCOzPtUC244IhHARzu86bWYxQJUw0/kZl5wVGcH
+          maSgr39h1xPst0Vx1keJ95AH0wqxPbCcyBGtF1L6HQlLidmoIDqcCQpLsGJJEoOs
+          NVNhhcb66OJHah5ppI1N3cZehdaKyr1XcF9eedwLFTvuiwTn6qMmttT/tHX7rcxT
+          owIDAQAB
+          -----END PUBLIC KEY-----
+        cloud.galaxyproject.org.conf: |
+          CVMFS_SERVER_URL="http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@;http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
+          CVMFS_PUBLIC_KEY="/etc/cvmfs/config.d/cloud.galaxyproject.org.pub"
+        cloud.galaxyproject.org.pub: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuJZTWTY3/dBfspFKifv8
+          TWuuT2Zzoo1cAskKpKu5gsUAyDFbZfYBEy91qbLPC3TuUm2zdPNsjCQbbq1Liufk
+          uNPZJ8Ubn5PR6kndwrdD13NVHZpXVml1+ooTSF5CL3x/KUkYiyRz94sAr9trVoSx
+          THW2buV7ADUYivX7ofCvBu5T6YngbPZNIxDB4mh7cEal/UDtxV683A/5RL4wIYvt
+          S5SVemmu6Yb8GkGwLGmMVLYXutuaHdMFyKzWm+qFlG5JRz4okUWERvtJ2QAJPOzL
+          mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
+          dQIDAQAB
+          -----END PUBLIC KEY-----
+#        main.galaxyproject.org.conf: |
+#          CVMFS_SERVER_URL="http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@;http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
+#          CVMFS_PUBLIC_KEY="/etc/cvmfs/config.d/main.galaxyproject.org.pub"
+#        main.galaxyproject.org.pub: |
+#          -----BEGIN PUBLIC KEY-----
+#          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6S6Tugcv4kk4C06f574l
+#          YCXQdK6lv2m7mqCh60G0zL1+rAkkEBDWna0yMQLBbj+yDsHjcOe0yISzbTfzG6wk
+#          KnHZUQ/JOeK7lUAbDMxHqnjkEPAbAl4vXl2Y04MW2lzJtXcDKakmLirvV/dfUYqE
+#          gGGx0dc/Z+XmUTf1DvZFJknrBUUxO5+F6m7k/NGrlpAca+e9B0kwCclaE4NyaNWK
+#          Jv5rPWCYz5/sDNW4cNvBdBjwGf46etbczmJoTAbl0oM6LLGdebwkJStd0R1wkj+A
+#          torRYcoFZICTZqY9e/KsadHUeZnH3RvfMypH5oS1POzsFszoSxBhZIBkZbG3/f9Y
+#          OQIDAQAB
+#          -----END PUBLIC KEY-----
+#        sandbox.galaxyproject.org.conf: |
+#          CVMFS_SERVER_URL="http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@;http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
+#          CVMFS_PUBLIC_KEY="/etc/cvmfs/config.d/sandbox.galaxyproject.org.pub"
+#        sandbox.galaxyproject.org.pub: |
+#          -----BEGIN PUBLIC KEY-----
+#          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1jHnrwsxMUkMZDAj9GMt
+#          WNCFFrNVejTTbyklk+52yyXgVgRWo1qN+5lh6W2UL/b2v9pOEzRVPZBQvNNwKo6P
+#          e+5p2JBVJ5yv7tpegEnHaRYw6yoHlWLzeSfiu8/yNp2s3jzK52zdLE9rZu7KlXH3
+#          EiY2LbU8wa0oah8BlvqWoHlWm78IQbbgK3Q0KmsXpvpjjhYkRWh/TL7KRmwT0b+C
+#          WDNbviUi62sBl1SWQ95kcsfqfviU94DKGWRWDYngnYRV5PZVLuUw8Egix6lW2Sj0
+#          l5LILRbaIyXiTsFqXfK1dtjAOmZMkX4wuBch13y9FhMCIRvBDWYQuyxugSC101Ur
+#          YwIDAQAB
+#          -----END PUBLIC KEY-----
 
-  #cvmfs-gxy-cloud: cloud.galaxyproject.org
-  # cvmfs-gxy-data: data.galaxyproject.org
-  # cvmfs-gxy-main: main.galaxyproject.org
-#  cvmfs-gxy-sandbox: sandbox.galaxyproject.org
-#  cvmfs-gxy-test: test.galaxyproject.org
-#  cvmfs-gxy-singularity: singularity.galaxyproject.org
-
-cache:
-  # If both local and alien cache are disabled, ephemeral
-  # storage (emptyDir volume) will be used for caching
-  # Requires a ReadWriteOnce volume for the local cache
-  # localCache can not be used in a multi-node setup unless
-  # the cache PVs are defined manually for all pods of the DaemonSet.
-  # If local cache is enabled, alien cache must be disabled.
-  localCache:
-    enabled: false
-    storageClass: ""
-    # size in Mi, will propagate to both default.local and PV/PVC size
-    size: 10000
-    mountPath: /mnt/cvmfs/localcache
-    # existingClaim: existing-claim
-  # Optional shared ReadWriteMany cache volume.
-  # If alien cache is enabled, local cache must be disabled.
-  # An emptyDir ephemeral volume will be used for local
-  # control files for each pod scaled by the DaemonSet on
-  # each node. The alien cache volume will be shared
-  # among all the CVMFS clients running on the different nodes.
-  # Read more about alien cache limitations at:
-  # https://cvmfs.readthedocs.io/en/stable/cpt-configure.html#alien-cache
-  alienCache:
-    enabled: true
-    size: 10000 # in Mi
-    storageClass: nfs
-    mountPath: /mnt/cvmfs/aliencache
-    # existingClaim: existing-claim
-  preload:
-    enabled: false
-    repositories:
-      - name: main.galaxyproject.org
-        mountPath: /cvmfs/main.galaxyproject.org
-        image: busybox
-        commands:
-          - find /cvmfs/main.galaxyproject.org/shed_tools -type f -not -path "*/.hg/*" -path "*.xml" -exec cat \{\} \; > /dev/null
-          - find /cvmfs/main.galaxyproject.org/config -type f -exec cat \{\} \; > /dev/null
-          - find /cvmfs/main.galaxyproject.org/tool_data -type f -exec cat \{\} \; > /dev/null
-      # - name: data.galaxyproject.org
-      #   mountPath: /cvmfs/data.galaxyproject.org
-      #   # Docker image with cvmfs_preload binary pre-installed
-      #   image: almahmoud/cvmfs_preload:latest
-      #   mountConfigs:
-      #     - defaultLocal
-      #     - gxyDataKey
-      #   mountCache: true
-      #   commands:
-      #     - cvmfs_preload -u http://cvmfs0-psu0.galaxyproject.org/cvmfs/data.galaxyproject.org -r /mnt/cvmfs/aliencache -k /etc/cvmfs/keys
-
-# Advanced settings
-# Changing these settings is not advised unless you know what you are doing
-csiPlugin:
-  # This image includes the patch to the plugin allowing
-  # for multiple PVCs across multiple namespaces
-  # https://github.com/cernops/cvmfs-csi/commit/c680862082738aba1469707a891a6f7fecf72f53
-  image: cloudve/csi-cvmfsplugin:v1.0.1
-  args:
-    - "--nodeid=$(NODE_ID)"
-    - "--endpoint=$(CSI_ENDPOINT)"
-    - "--v=5"
-    - "--drivername=csi-cvmfsplugin"
-  pluginDirectory: /var/lib/kubelet/plugins/csi-cvmfsplugin
-  nodeDriverImage: quay.io/k8scsi/csi-node-driver-registrar:v1.0.2
-csiAttacher:
-  image: quay.io/k8scsi/csi-attacher:v1.0.1
-  args:
-    - "--v=5"
-    - "--csi-address=$(ADDRESS)"
-csiProvisioner:
-  image: quay.io/k8scsi/csi-provisioner:v1.0.1
-  args:
-    - "--provisioner=csi-cvmfsplugin"
-    - "--csi-address=$(ADDRESS)"
-    - "--v=5"
+  cache:
+    local:
+      enabled: false
+      pvc:
+        storageClass:
+        size: 10000 # in Mi
+    alien:
+      enabled: true
+      pvc:
+        size: 10000 # in Mi
+        storageClass: nfs
