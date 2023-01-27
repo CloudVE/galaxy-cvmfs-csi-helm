@@ -17,7 +17,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ tpl .Values.cvmfscsi.cache.local.pvc.storageClass $ }}
+  name: {{ tpl .Values.cvmfscsi.cache.local.pvc.name $ }}
   labels:
     {{- include "galaxy-cvmfs-csi.labels" $ | nindent 4 }}
 spec:
