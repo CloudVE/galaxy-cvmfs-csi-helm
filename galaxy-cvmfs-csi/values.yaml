@@ -54,10 +54,12 @@ cvmfscsi:
     local:
       enabled: false
       pvc:
+        name: "{{ .Release.Name }}-cvmfs-local-cache-pvc"
         storageClass:
         size: 10000 # in Mi
     alien:
       enabled: true
       pvc:
+        name: "{{ .Release.Name }}-cvmfs-alien-cache-pvc"
         size: 10000 # in Mi
         storageClass: nfs
