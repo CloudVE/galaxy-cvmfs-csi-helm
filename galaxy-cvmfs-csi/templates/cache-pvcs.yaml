@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: cvmfs-alien-cache
+  name: {{ .Release.Name }}-cvmfs-alien-cache-pvc
   labels:
     {{- include "galaxy-cvmfs-csi.labels" $ | nindent 4 }}
 spec:
