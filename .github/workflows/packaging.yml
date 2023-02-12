@@ -8,6 +8,12 @@ jobs:
     name: Package and push
     runs-on: ubuntu-latest
     steps:
+      - name: Require a label and version bump to package and release
+        uses: mheap/github-action-required-labels@v2
+        with:
+          mode: exactly
+          count: 1
+          labels: "major,minor,patch"
       - uses: actions/checkout@v2
         with:
            persist-credentials: false
