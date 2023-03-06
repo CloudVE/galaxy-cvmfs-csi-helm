@@ -1,7 +1,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ $.Release.Name }}-cvmfs
+  name: {{ tpl .Values.storageClassName . }}
   labels:
     {{- include "galaxy-cvmfs-csi.labels" $ | nindent 4 }}
 provisioner: cvmfs.csi.cern.ch

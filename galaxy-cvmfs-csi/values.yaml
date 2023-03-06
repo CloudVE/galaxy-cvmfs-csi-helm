@@ -5,6 +5,8 @@
 # All contents will be run through tpl
 # All mountPaths are relative to /etc/cvmfs/
 
+storageClassName: "{{ .Release.Name }}-cvmfs"
+
 cvmfscsi:
   cvmfsConfig:
     config.d:
