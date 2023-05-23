@@ -1,6 +1,4 @@
 # Default values for galaxy-cvmfs-csi.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 
 # All contents will be run through tpl
 # All mountPaths are relative to /etc/cvmfs/
@@ -9,24 +7,7 @@ storageClassName: "{{ .Release.Name }}-cvmfs"
 
 cvmfscsi:
   extraConfigMaps:
-  - name: cvmfs-csi-default-local
-    data:
-      default.local: |
-        CVMFS_USE_GEOAPI=yes
-        CVMFS_HTTP_PROXY="http://ca-proxy.cern.ch:3128"
-        # It is advised to change these configs in the cache section of the helm values
-        # and leave them unchanged here, so they auto-generate.
-        CVMFS_QUOTA_LIMIT={{ .Values.cache.local.cvmfsQuotaLimit }}
-        CVMFS_CACHE_BASE=/cvmfs-localcache
-        {{- if .Values.cache.alien.enabled }}
-        CVMFS_ALIEN_CACHE=/cvmfs-aliencache
-        # When alien cache is used, CVMFS does not control the size of the cache.
-        CVMFS_QUOTA_LIMIT=-1
-        # Whether repositories should share a cache directory or each have their own.
-        CVMFS_SHARED_CACHE=no
-        {{- end -}}
-  - name: cvmfs-csi-config-d
-    data:
+    cvmfs-csi-config-d:
       data.galaxyproject.org.conf: |
         CVMFS_SERVER_URL="http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@;http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
         CVMFS_PUBLIC_KEY="/etc/cvmfs/config.d/data.galaxyproject.org.pub"
@@ -41,32 +22,7 @@ cvmfscsi:
         NVNhhcb66OJHah5ppI1N3cZehdaKyr1XcF9eedwLFTvuiwTn6qMmttT/tHX7rcxT
         owIDAQAB
         -----END PUBLIC KEY-----
-      #  main.galaxyproject.org.conf: |
-      #    CVMFS_SERVER_URL="http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@;http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
-      #    CVMFS_PUBLIC_KEY="/etc/cvmfs/config.d/main.galaxyproject.org.pub"
-      #  main.galaxyproject.org.pub: |
-      #    -----BEGIN PUBLIC KEY-----
-      #    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6S6Tugcv4kk4C06f574l
-      #    YCXQdK6lv2m7mqCh60G0zL1+rAkkEBDWna0yMQLBbj+yDsHjcOe0yISzbTfzG6wk
-      #    KnHZUQ/JOeK7lUAbDMxHqnjkEPAbAl4vXl2Y04MW2lzJtXcDKakmLirvV/dfUYqE
-      #    gGGx0dc/Z+XmUTf1DvZFJknrBUUxO5+F6m7k/NGrlpAca+e9B0kwCclaE4NyaNWK
-      #    Jv5rPWCYz5/sDNW4cNvBdBjwGf46etbczmJoTAbl0oM6LLGdebwkJStd0R1wkj+A
-      #    torRYcoFZICTZqY9e/KsadHUeZnH3RvfMypH5oS1POzsFszoSxBhZIBkZbG3/f9Y
-      #    OQIDAQAB
-      #    -----END PUBLIC KEY-----
-      #  sandbox.galaxyproject.org.conf: |
-      #    CVMFS_SERVER_URL="http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@;http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@;http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
-      #    CVMFS_PUBLIC_KEY="/etc/cvmfs/config.d/sandbox.galaxyproject.org.pub"
-      #  sandbox.galaxyproject.org.pub: |
-      #    -----BEGIN PUBLIC KEY-----
-      #    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1jHnrwsxMUkMZDAj9GMt
-      #    WNCFFrNVejTTbyklk+52yyXgVgRWo1qN+5lh6W2UL/b2v9pOEzRVPZBQvNNwKo6P
-      #    e+5p2JBVJ5yv7tpegEnHaRYw6yoHlWLzeSfiu8/yNp2s3jzK52zdLE9rZu7KlXH3
-      #    EiY2LbU8wa0oah8BlvqWoHlWm78IQbbgK3Q0KmsXpvpjjhYkRWh/TL7KRmwT0b+C
-      #    WDNbviUi62sBl1SWQ95kcsfqfviU94DKGWRWDYngnYRV5PZVLuUw8Egix6lW2Sj0
-      #    l5LILRbaIyXiTsFqXfK1dtjAOmZMkX4wuBch13y9FhMCIRvBDWYQuyxugSC101Ur
-      #    YwIDAQAB
-      #    -----END PUBLIC KEY-----
+
   cache:
     local:
       enabled: false
