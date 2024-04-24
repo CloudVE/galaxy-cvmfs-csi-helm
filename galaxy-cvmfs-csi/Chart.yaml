@@ -1,11 +1,11 @@
 apiVersion: v2
-appVersion: "2.2.0"
+appVersion: "2.3.2"
 description: A Helm chart to deploy the CVMFS-CSI Plugin with a pre-built configuration for Galaxy repositories
 name: galaxy-cvmfs-csi
 version: 2.2.0
 icon: https://galaxyproject.org/images/galaxy-logos/galaxy_project_logo_square.png
 dependencies:
   - name: cvmfs-csi
-    repository: https://registry.cern.ch/chartrepo/cern
-    version: 2.2.0
+    repository: oci://registry.cern.ch/kubernetes/charts
+    version: 2.3.2
     alias: cvmfscsi
