@@ -7,5 +7,5 @@ icon: https://galaxyproject.org/images/galaxy-logos/galaxy_project_logo_square.p
 dependencies:
   - name: cvmfs-csi
     repository: oci://registry.cern.ch/kubernetes/charts
-    version: 2.3.2
+    version: 2.5.0
     alias: cvmfscsi
