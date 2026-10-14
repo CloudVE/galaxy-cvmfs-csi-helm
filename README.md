@@ -17,6 +17,27 @@ helm install gxy-cvmfs galaxy-cvmfs-csi-helm/galaxy-cvmfs-csi/
 ```
 
 
+## Reference repositories
+
+The defaults configure `data.galaxyproject.org` and `idc.galaxyproject.org`,
+including their server URLs and public signing keys. The node plugin receives
+these files under `/etc/cvmfs/config.d`; both repositories are available through
+its CVMFS automounter. Consumers can mount each repository from the same CSI
+volume using its repository name as the subpath.
+
+Galaxy's chart configures application/job mounts and loads IDC's data-table XML.
+This chart configures the CVMFS client; it does not load Galaxy tables or
+provision CVMFS on remote compute workers.
+
+## Validation
+
+```console
+helm dependency build galaxy-cvmfs-csi
+helm lint galaxy-cvmfs-csi
+python -m pip install PyYAML
+python -m unittest discover -s tests -v
+```
+
 ## History
 
 The original version of this chart has been PR-ed back to CERN:
